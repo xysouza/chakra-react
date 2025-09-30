@@ -1,6 +1,6 @@
 # Navbar Responsiva para Portfólio com Chakra UI
 
-![Prévia](https://imgur.com/a/2a5UXuY)
+![Prévia](https://i.imgur.com/LvH2Vja.png)
 ## 📝 Descrição do Projeto
 
 Este repositório contém o código para uma barra de navegação (Navbar) moderna e totalmente responsiva, desenvolvida como parte de um estudo prático de componentização com React e Chakra UI v3. O objetivo foi criar um componente de UI reutilizável e adaptável para um site de portfólio pessoal.
