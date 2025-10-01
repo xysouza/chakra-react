@@ -1,16 +1,24 @@
-# React + Vite
+# Navbar Responsiva para Portfólio com Chakra UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Prévia](https://i.imgur.com/LvH2Vja.png)
+## 📝 Descrição do Projeto
 
-Currently, two official plugins are available:
+Este repositório contém o código para uma barra de navegação (Navbar) moderna e totalmente responsiva, desenvolvida como parte de um estudo prático de componentização com React e Chakra UI v3. O objetivo foi criar um componente de UI reutilizável e adaptável para um site de portfólio pessoal.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Funcionalidades
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Layout Responsivo:** O menu de navegação se adapta perfeitamente a telas de desktop, tablet e mobile.
+- **Menu Hambúrguer:** Em telas menores, os links são substituídos por um ícone de menu que abre um painel lateral (Drawer).
+- **Componentização:** O código é estruturado em um único componente React (`<Nav />`) para fácil reutilização.
+- **Acessibilidade:** Construído com os componentes do Chakra UI, que seguem as melhores práticas de acessibilidade da web (WAI-ARIA).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Tecnologias Utilizadas
+
+- **[React](https://reactjs.org/)**: Biblioteca para construção de interfaces de usuário.
+- **[Chakra UI v3](https://chakra-ui.com/)**: Biblioteca de componentes para React, focada em acessibilidade e experiência do desenvolvedor.
+- **[React Icons](https://react-icons.github.io/react-icons/)**: Biblioteca para inclusão de ícones populares no projeto.
+- **[Vite](https://vitejs.dev/)**: Ferramenta de build para um desenvolvimento frontend moderno e rápido.
