@@ -1,14 +1,14 @@
-import React from 'react'
-import Nav from './components/Nav'
-import Sobre from './components/Sobre'
+import React from 'react';
+import Nav from './components/Nav';
+import Hero from './components/Hero';
 
 function App() {
   return (
     <>
       <Nav />
-      <Sobre />
+      <Hero />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
