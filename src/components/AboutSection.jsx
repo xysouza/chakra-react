@@ -1,12 +1,3 @@
-/**
- * Seção "Sobre Mim" do landing page.
- *
- * Objetivo deste arquivo:
- *  - Centralizar os textos em um único lugar (arrays `ABOUT_CARDS` e `TECH_STACK`).
- *  - Manter a lógica visual (glow neon) agrupada em helpers simples.
- *  - Facilitar manutenção para quem está começando: procure os comentários `//`.
- */
-
 import {
   Box,
   Stack,
