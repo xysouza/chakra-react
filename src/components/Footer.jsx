@@ -157,15 +157,7 @@ function Footer() {
           color="whiteAlpha.600"
           textAlign="center"
         >
-          © {new Date().getFullYear()} Adriano Oliveira. Desenvolvido com{' '}
-          <Box as="span" color={COLORS.accentWarm}>
-            ♥
-          </Box>{' '}
-          e muito{' '}
-          <Box as="span" color={COLORS.accent}>
-            código
-          </Box>
-          .
+          © {new Date().getFullYear()} Adriano Oliveira 
         </Text>
       </Box>
     </Box>

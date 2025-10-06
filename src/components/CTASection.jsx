@@ -9,7 +9,8 @@ import {
   Button,
   Link,
 } from '@chakra-ui/react';
-import { FiMail, FiPhone, FiMapPin, FiSend } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa6';
 
 const COLORS = {
   accent: '#2CFF99',
@@ -182,25 +183,28 @@ function CTASection() {
         zIndex={1}
       >
         <Text fontSize={{ base: 'md', md: 'lg' }} color="whiteAlpha.700">
-          Tem um projeto em mente? Ou quer apenas trocar uma ideia sobre
-          tecnologia e música?
+          Tem um projeto em mente? Ou quer apenas trocar uma ideia?
         </Text>
         <Button
           as="a"
-          href="mailto:contato@adriano.dev"
-          leftIcon={<Icon as={FiSend} boxSize="20px" />}
+          href="https://wa.me/5581987352002?text=Ol%C3%A1%20Adriel%2C%20vim%20do%20seu%20portf%C3%B3lio!"
+          target="_blank"
+          rel="noopener noreferrer"
           borderRadius="full"
           px={{ base: 10, md: 12 }}
           py={{ base: 6, md: 6.5 }}
-          fontWeight="bold"
           fontSize={{ base: 'md', md: 'lg' }}
           bg={COLORS.accent}
           color="#031014"
           boxShadow="0 24px 75px rgba(44,255,153,0.32)"
-          _hover={{ filter: 'brightness(1.1)', transform: 'translateY(-3px)' }}
-          _active={{ transform: 'translateY(-1px)' }}
+          transition="all .25s ease"
+          _hover={{ filter: 'brightness(1.08)', transform: 'translateY(-3px)' }}
+          _active={{
+            transform: 'translateY(-1px)',
+            filter: 'brightness(0.98)',
+          }}
         >
-          Enviar Mensagem
+          <FaWhatsapp />Falar no WhatsApp
         </Button>
       </Stack>
     </Box>

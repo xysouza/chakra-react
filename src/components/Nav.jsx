@@ -12,6 +12,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
+import { FaWhatsapp } from "react-icons/fa6";
 import { useMemo, useState } from 'react';
 
 const Nav = () => {
@@ -109,7 +110,7 @@ const Nav = () => {
             filter: 'brightness(1.1)',
           }}
         >
-          Fale no WhatsApp
+          <FaWhatsapp /> Fale no WhatsApp
         </Button>
 
         <Drawer.Root
@@ -225,7 +226,7 @@ const Nav = () => {
                     width="full"
                     onClick={() => setIsOpen(false)}
                   >
-                    Falar no WhatsApp
+                    <FaWhatsapp /> Falar no WhatsApp
                   </Button>
                 </Drawer.Body>
               </Drawer.Content>
