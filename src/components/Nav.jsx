@@ -109,7 +109,7 @@ const Nav = () => {
             filter: 'brightness(1.1)',
           }}
         >
-          Contact Me
+          Fale no WhatsApp
         </Button>
 
         <Drawer.Root
