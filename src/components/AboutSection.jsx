@@ -7,7 +7,18 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
-import { FiCode, FiActivity, FiMusic, FiHeart } from 'react-icons/fi';
+// Ícones das tecnologias (react-icons)
+import { FaReact, FaNode, FaGitAlt } from 'react-icons/fa';
+import { SiTypescript, SiChakraui } from 'react-icons/si';
+import {
+  GiArtificialIntelligence,
+  GiCompass,
+  GiLightningSpanner,
+  GiGalaxy,
+} from 'react-icons/gi';
+import { RiTailwindCssFill } from 'react-icons/ri';
+import { TbApi } from 'react-icons/tb';
+import { RxRocket } from 'react-icons/rx';
 
 // Paleta base usada em toda a tela (mantemos em um único lugar).
 const COLORS = {
@@ -36,71 +47,53 @@ const ACCENT_TOKENS = {
 // Conteúdo dos cards principais. Caso precise mudar textos, altere aqui.
 const ABOUT_CARDS = [
   {
-    id: 'dev',
-    title: 'O Desenvolvedor',
-    icon: FiCode,
+    id: 'origem',
+    title: 'A Origem',
+    icon: GiCompass,
     accent: 'accent',
     description: [
-      'Estudante de Desenvolvimento de Sistemas, apaixonado por ',
-      { text: 'React', color: COLORS.accent },
-      ', ',
-      { text: 'IA', color: COLORS.accent },
-      ' e tecnologias que transformam. Construo aplicações que resolvem problemas reais, com foco em ',
-      { text: 'experiência do usuário', color: COLORS.accentWarm },
-      ' e código limpo.',
+      'Minha jornada não começou em um escritório de tecnologia. Começou na área administrativa e nas ruas como motorista de aplicativo. Ali vi a urgência das pessoas, processos ineficientes e a necessidade de ferramentas que funcionem de verdade. Pragmatismo puro, forjado para resolver problemas reais. '
     ],
   },
   {
-    id: 'street',
-    title: 'A Rua',
-    icon: FiActivity,
+    id: 'virada',
+    title: 'A Virada',
+    icon: GiLightningSpanner,
     accent: 'accent',
     description: [
-      'Meus dias na moto como motorista de aplicativo me ensinaram sobre ',
-      { text: 'resiliência', color: COLORS.accent },
-      ', ',
-      { text: 'agilidade', color: COLORS.accent },
-      ' e a importância de soluções que funcionam no mundo real. Essa vivência me conecta com as necessidades reais das pessoas.',
+      'Eu via os problemas, mas faltava a ferramenta. No código encontrei o poder de transformar problemas em solução. Programar não é sobre telas bonitas; é devolver tempo, construir pontes e automatizar o caos. É o meio de consertar o que existe e criar o que ainda não existe. ',
     ],
   },
   {
-    id: 'music',
-    title: 'A Música',
-    icon: FiMusic,
-    accent: 'accentWarm',
+    id: 'arsenal',
+    title: 'O Arsenal',
+    icon: RxRocket,
+    accent: 'accent',
     description: [
-      'O violão e o canto são minha válvula de escape criativa. A música me ensinou sobre ',
-      { text: 'ritmo', color: COLORS.accentWarm },
-      ', ',
-      { text: 'harmonia', color: COLORS.accentWarm },
-      ' e a beleza da criação. Trago essa sensibilidade para cada interface que desenvolvo.',
+      'Tem uma ideia ou processo travado? Eu transformo em produto digital. De um app em React Native a uma plataforma web em React: ouvir, entender a dor e entregar algo intuitivo e robusto. Tecnologia é o arsenal que coloco a serviço da sua necessidade. ',
     ],
   },
   {
-    id: 'mission',
+    id: 'missao',
     title: 'A Missão',
-    icon: FiHeart,
+    icon: GiGalaxy,
     accent: 'accent',
     description: [
-      'Desenvolvi apps para ajudar meu pai em seu negócio e outros trabalhadores autônomos. Acredito que a tecnologia deve ',
-      { text: 'empoderar', color: COLORS.accent },
-      ' e ',
-      { text: 'facilitar', color: COLORS.accent },
-      ' a vida das pessoas, não complicá-la.',
+      'Procuro parceiros, empresas ou profissionais para criar ferramentas que gerem impacto real. Não busco apenas um trabalho, busco desafios que façam diferença. Se precisa de alguém que se importa com o resultado tanto quanto você, vamos conversar. ',
     ],
   },
 ];
 
 // Lista de tecnologias exibidas nas "chips" inferiores.
 const TECH_STACK = [
-  'React',
-  'TypeScript',
-  'Chakra UI',
-  'Node.js',
-  'Git',
-  'IA/ML',
-  'Tailwind CSS',
-  'REST APIs',
+  { label: 'React', icon: FaReact, color: '#61DAFB' },
+  { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
+  { label: 'Chakra UI', icon: SiChakraui, color: '#2CFF99' },
+  { label: 'Node.js', icon: FaNode, color: '#8CC84B' },
+  { label: 'Git', icon: FaGitAlt, color: '#F1502F' },
+  { label: 'IA/ML', icon: GiArtificialIntelligence, color: '#FF6B35' },
+  { label: 'Tailwind CSS', icon: RiTailwindCssFill, color: '#38BDF8' },
+  { label: 'REST APIs', icon: TbApi, color: '#FFB347' },
 ];
 
 /**
@@ -204,7 +197,7 @@ function TechBadgeRow() {
       mx="auto"
       pt={{ base: 4, md: 6 }}
     >
-      {TECH_STACK.map((label) => (
+      {TECH_STACK.map(({ label, icon, color }) => (
         <Flex
           key={label}
           px={{ base: 5, md: 6 }}
@@ -219,12 +212,17 @@ function TechBadgeRow() {
           textTransform="uppercase"
           boxShadow="0 8px 22px rgba(8,12,20,0.35)"
           transition="all 0.25s ease"
+          align="center"
+          gap={3}
           _hover={{
-            color: COLORS.accent,
-            borderColor: 'rgba(44,255,153,0.55)',
-            boxShadow: '0 10px 28px rgba(44,255,153,0.22)',
+            borderColor: color || 'rgba(44,255,153,0.55)',
+            boxShadow: `0 10px 28px ${
+              color ? color + '55' : 'rgba(44,255,153,0.22)'
+            }`,
+            color: color || COLORS.accent,
           }}
         >
+          <Icon as={icon} fontSize="18px" color={color} />
           {label}
         </Flex>
       ))}

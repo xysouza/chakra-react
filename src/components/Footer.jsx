@@ -28,26 +28,20 @@ const SOCIAL_LINKS = [
   {
     id: 'github',
     label: 'GitHub',
-    href: 'https://github.com/',
+    href: 'https://github.com/xysouza/',
     icon: FiGithub,
   },
   {
     id: 'linkedin',
     label: 'LinkedIn',
-    href: 'https://www.linkedin.com/',
+    href: 'https://www.linkedin.com/in/adriano-s-oliveira/',
     icon: FiLinkedin,
   },
   {
     id: 'email',
     label: 'E-mail',
-    href: 'mailto:contato@adriano.dev',
+    href: 'mailto:devadriano432hz@gmail.com',
     icon: FiMail,
-  },
-  {
-    id: 'music',
-    label: 'Playlist',
-    href: 'https://open.spotify.com/',
-    icon: FiMusic,
   },
 ];
 

@@ -23,23 +23,23 @@ const CONTACT_METHODS = [
   {
     id: 'email',
     label: 'Email',
-    value: 'contato@adriano.dev',
+    value: 'devadriano432hz@gmail.com',
     icon: FiMail,
-    href: 'mailto:contato@adriano.dev',
+    href: 'mailto:devadriano432hz@gmail.com',
   },
   {
     id: 'phone',
     label: 'Telefone',
-    value: '+55 (11) 99999-9999',
+    value: '+55 (81) 98735-2002',
     icon: FiPhone,
-    href: 'tel:+5511999999999',
+    href: 'tel:+5581987352002',
   },
   {
     id: 'location',
     label: 'Localização',
-    value: 'São Paulo, SP',
+    value: 'Olinda, PE',
     icon: FiMapPin,
-    href: 'https://maps.google.com/?q=São+Paulo,+SP',
+    href: 'https://maps.google.com/?q=Olinda,+PE',
   },
 ];
 

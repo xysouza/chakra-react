@@ -10,74 +10,54 @@ import {
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import {
-  FiCpu,
-  FiMusic,
-  FiZap,
   FiGithub,
   FiLinkedin,
   FiMail,
 } from 'react-icons/fi';
+import { FaReact, FaNodeJs } from 'react-icons/fa';
+import { TbBrandReactNative } from "react-icons/tb";
 import ScrollIndicator from './ui/ScrollIndicator';
 import heroBg from '../assets/img/hero-bg.jpg';
 
 const accent = '#2CFF99';
 const secondary = '#8CA3AF';
 
+const caretBlink = keyframes`
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+`;
+
 const glitchPrimary = keyframes`
-  0%, 100% {
-    transform: translate3d(0,0,0);
-  }
-  20% {
-    transform: translate3d(-2px,-2px,0);
-  }
-  40% {
-    transform: translate3d(2px,1px,0);
-  }
-  60% {
-    transform: translate3d(-1px,2px,0);
-  }
-  80% {
-    transform: translate3d(1px,-1px,0);
-  }
+  0%, 100% { transform: translate3d(0,0,0); }
+  20% { transform: translate3d(-2px,-2px,0); }
+  40% { transform: translate3d(2px,1px,0); }
+  60% { transform: translate3d(-1px,2px,0); }
+  80% { transform: translate3d(1px,-1px,0); }
 `;
 
 const glitchLayer = keyframes`
-  0% {
-    clip-path: inset(0 0 70% 0);
-    transform: translate3d(-10px,2px,0);
-  }
-  20% {
-    clip-path: inset(30% 0 35% 0);
-    transform: translate3d(3px,-2px,0);
-  }
-  40% {
-    clip-path: inset(60% 0 10% 0);
-    transform: translate3d(-4px,2px,0);
-  }
-  60% {
-    clip-path: inset(10% 0 70% 0);
-    transform: translate3d(2px,-1px,0);
-  }
-  80% {
-    clip-path: inset(40% 0 25% 0);
-    transform: translate3d(-3px,1px,0);
-  }
-  100% {
-    clip-path: inset(0 0 65% 0);
-    transform: translate3d(0,0,0);
-  }
+  0% { clip-path: inset(0 0 70% 0); transform: translate3d(-10px,2px,0); }
+  20% { clip-path: inset(30% 0 35% 0); transform: translate3d(3px,-2px,0); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translate3d(-4px,2px,0); }
+  60% { clip-path: inset(10% 0 70% 0); transform: translate3d(2px,-1px,0); }
+  80% { clip-path: inset(40% 0 25% 0); transform: translate3d(-3px,1px,0); }
+  100% { clip-path: inset(0 0 65% 0); transform: translate3d(0,0,0); }
 `;
 
 const tagOptions = [
-  { label: 'React & IA', icon: FiCpu, color: accent },
-  { label: 'Músico', icon: FiMusic, color: '#FF7E6E' },
-  { label: 'Empreendedor', icon: FiZap, color: '#FFC857' },
+  { label: 'React', icon: FaReact, color: '#00ffff' },
+  { label: 'React Native', icon: TbBrandReactNative, color: '#00ffff' },
+  { label: 'NodeJS', icon: FaNodeJs, color: '#FFC857' },
 ];
 
 const socialLinks = [
-  { icon: FiGithub, label: 'GitHub', href: 'https://github.com/' },
-  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/' },
-  { icon: FiMail, label: 'E-mail', href: 'mailto:contato@adriano.dev' },
+  { icon: FiGithub, label: 'GitHub', href: 'https://github.com/xysouza/' },
+  {
+    icon: FiLinkedin,
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/adriano-s-oliveira/',
+  },
+  { icon: FiMail, label: 'E-mail', href: 'mailto:devadriano432hz@gmail.com' },
 ];
 
 const HeroBackground = () => (
@@ -145,16 +125,44 @@ const GlitchHeading = () => (
 
 const HeroIntro = () => (
   <Stack spacing={4} align="center" textAlign="center">
-    <Text
-      fontSize={{ base: 'sm', md: 'md' }}
-      letterSpacing="0.4em"
+    <Flex
+      as="span"
+      fontSize={{ base: 'xs', md: 'sm' }}
       color={`${accent}CC`}
       textTransform="uppercase"
       fontWeight="semibold"
-      opacity={0.85}
+      opacity={0.9}
+      align="center"
+      justify="center"
+      lineHeight="1"
+      mx="auto"
+      position="relative"
+      pl="1.4ch" /* reserva espaço exato para o caret */
+      fontFamily="'JetBrains Mono','Fira Mono',monospace"
+      letterSpacing="0.38em"
     >
-      {'>'} Desenvolvedor Full-Stack
-    </Text>
+      <Box
+        as="span"
+        position="absolute"
+        left={0}
+        top="50%"
+        transform="translateY(-50%)"
+        color={accent}
+        fontWeight="bold"
+        w="1ch"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        animation={`${caretBlink} 1.05s steps(2) infinite`}
+        userSelect="none"
+        lineHeight="1"
+      >
+        {'>'}
+      </Box>
+      <Text as="span" lineHeight="1" display="inline-block">
+        Desenvolvedor Full-Stack
+      </Text>
+    </Flex>
 
     <GlitchHeading />
 
@@ -164,15 +172,15 @@ const HeroIntro = () => (
       maxW="3xl"
       lineHeight="1.65"
     >
-      Da{' '}
+      Desenvolvendo {' '}
       <Box as="span" color={accent} fontWeight="semibold" display="inline">
-        rua
+        soluções digitais
       </Box>{' '}
-      ao{' '}
+      que impactam, com {' '}
       <Box as="span" color={accent} fontWeight="semibold" display="inline">
-        código
+        visão estratégica {' '}
       </Box>
-      , transformando experiências reais em soluções digitais que impactam.
+       de quem entende o negócio além do código.
     </Text>
   </Stack>
 );
