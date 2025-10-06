@@ -12,11 +12,22 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
-import { FaWhatsapp } from "react-icons/fa6";
-import { useMemo, useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa6';
+import { useMemo, useState, useEffect } from 'react';
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Detecta scroll para deixar o header mais sólido ao rolar
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const whatsappHref = useMemo(() => {
     const mensagem =
@@ -52,16 +63,37 @@ const Nav = () => {
     },
   };
 
+  const navBg = scrolled ? 'rgba(6,12,18,0.9)' : 'rgba(6,12,18,0.55)';
+  const borderColor = scrolled
+    ? 'rgba(255,255,255,0.08)'
+    : 'rgba(255,255,255,0.04)';
+  const shadow = scrolled
+    ? '0 10px 28px -8px rgba(0,0,0,0.55)'
+    : '0 4px 18px -6px rgba(0,0,0,0.45)';
+
   return (
     <Box
       as="header"
       position="sticky"
       top="0"
       zIndex="banner"
-      backdropFilter="blur(18px)"
-      bg="rgba(2, 12, 20, 0.84)"
-      borderBottom="1px solid rgba(255,255,255,0.06)"
-      boxShadow="0 18px 28px rgba(1,5,9,0.45)"
+      backdropFilter="blur(18px) saturate(160%)"
+      bg={navBg}
+      borderBottom={`1px solid ${borderColor}`}
+      boxShadow={shadow}
+      transition="background-color .35s ease, box-shadow .35s ease, border-color .35s ease"
+      _before={{
+        content: '""',
+        position: 'absolute',
+        inset: '0',
+        pointerEvents: 'none',
+        background: scrolled
+          ? 'linear-gradient(180deg, rgba(44,255,153,0.08) 0%, rgba(44,255,153,0) 60%)'
+          : 'linear-gradient(180deg, rgba(44,255,153,0.12) 0%, rgba(44,255,153,0) 70%)',
+        opacity: scrolled ? 0.25 : 0.3,
+        mixBlendMode: 'overlay',
+        borderRadius: '0 0 0 0',
+      }}
     >
       <Flex
         as="nav"
