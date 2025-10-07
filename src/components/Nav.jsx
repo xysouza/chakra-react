@@ -14,6 +14,52 @@ import {
 import { FiMenu } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa6';
 import { useMemo, useState, useEffect } from 'react';
+import { keyframes } from '@emotion/react';
+
+// Animações para o drawer mobile
+const slideInRight = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideOutRight = keyframes`
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+`;
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+// Animação escalonada para os links mobile
+const slideUpStaggered = keyframes`
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +74,20 @@ const Nav = () => {
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Função para navegação suave entre seções
+  const handleSmoothScroll = (href) => {
+    if (href.startsWith('#')) {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }
+    setIsOpen(false); // Fecha o drawer se estiver aberto
+  };
 
   const whatsappHref = useMemo(() => {
     const mensagem =
@@ -116,7 +176,15 @@ const Nav = () => {
 
         <HStack spacing="6" display={{ base: 'none', md: 'flex' }}>
           {links.map((item) => (
-            <Link key={item.href} href={item.href} {...linkStyles}>
+            <Link
+              key={item.href}
+              href={item.href}
+              {...linkStyles}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSmoothScroll(item.href);
+              }}
+            >
               {item.label}
             </Link>
           ))}
@@ -158,7 +226,14 @@ const Nav = () => {
               color="white"
               borderRadius="full"
               size="lg"
-              _hover={{ bg: 'rgba(44,255,153,0.08)' }}
+              transition="all 0.2s ease"
+              _hover={{
+                bg: 'rgba(44,255,153,0.08)',
+                transform: 'scale(1.05)',
+              }}
+              _active={{
+                transform: 'scale(0.95)',
+              }}
               onClick={() => setIsOpen(true)}
             >
               <FiMenu />
@@ -166,7 +241,15 @@ const Nav = () => {
           </Drawer.Trigger>
 
           <Portal>
-            <Drawer.Backdrop bg="blackAlpha.600" backdropFilter="blur(10px)" />
+            <Drawer.Backdrop
+              bg="blackAlpha.600"
+              backdropFilter="blur(10px)"
+              css={{
+                animation: isOpen
+                  ? `${fadeIn} 0.3s ease-out`
+                  : `${fadeOut} 0.2s ease-in`,
+              }}
+            />
             <Drawer.Positioner>
               <Drawer.Content
                 bg="rgba(2, 12, 20, 0.96)"
@@ -177,6 +260,11 @@ const Nav = () => {
                 borderWidth="1px"
                 borderColor="rgba(255,255,255,0.06)"
                 boxShadow="0 24px 60px rgba(1, 5, 9, 0.65)"
+                css={{
+                  animation: isOpen
+                    ? `${slideInRight} 0.4s cubic-bezier(0.16, 1, 0.3, 1)`
+                    : `${slideOutRight} 0.3s cubic-bezier(0.7, 0, 0.84, 0)`,
+                }}
               >
                 <Drawer.Header
                   borderBottomWidth="1px"
@@ -204,7 +292,7 @@ const Nav = () => {
                   py={{ base: 6, sm: 7 }}
                 >
                   <VStack as="nav" spacing={3} align="stretch">
-                    {links.map((item) => (
+                    {links.map((item, index) => (
                       <Link
                         key={item.href}
                         href={item.href}
@@ -218,12 +306,26 @@ const Nav = () => {
                         borderWidth="1px"
                         borderColor="rgba(255,255,255,0.08)"
                         bg="rgba(6,14,22,0.86)"
+                        css={{
+                          animation: isOpen
+                            ? `${slideUpStaggered} 0.5s ease-out ${
+                                index * 0.1 + 0.2
+                              }s both`
+                            : 'none',
+                        }}
                         _hover={{
                           color: accent,
                           bg: 'rgba(44,255,153,0.1)',
                           borderColor: 'rgba(44,255,153,0.35)',
+                          transform: 'translateY(-2px)',
                         }}
-                        onClick={() => setIsOpen(false)}
+                        _active={{
+                          transform: 'translateY(0)',
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSmoothScroll(item.href);
+                        }}
                       >
                         {item.label}
                       </Link>
@@ -235,6 +337,11 @@ const Nav = () => {
                     w="full"
                     bg="rgba(255,255,255,0.05)"
                     borderRadius="full"
+                    css={{
+                      animation: isOpen
+                        ? `${slideUpStaggered} 0.5s ease-out 0.5s both`
+                        : 'none',
+                    }}
                   />
 
                   <Button
@@ -249,6 +356,11 @@ const Nav = () => {
                     py="3"
                     px="6"
                     boxShadow="0 24px 55px rgba(44,255,153,0.3)"
+                    css={{
+                      animation: isOpen
+                        ? `${slideUpStaggered} 0.6s ease-out 0.6s both`
+                        : 'none',
+                    }}
                     _active={{ transform: 'translateY(1px)' }}
                     _hover={{
                       transform: 'translateY(-2px)',

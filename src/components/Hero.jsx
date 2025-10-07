@@ -8,14 +8,11 @@ import {
   Icon,
   IconButton,
 } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 import { keyframes } from '@emotion/react';
-import {
-  FiGithub,
-  FiLinkedin,
-  FiMail,
-} from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { FaReact, FaNodeJs } from 'react-icons/fa';
-import { TbBrandReactNative } from "react-icons/tb";
+import { TbBrandReactNative } from 'react-icons/tb';
 import ScrollIndicator from './ui/ScrollIndicator';
 import heroBg from '../assets/img/hero-bg.jpg';
 
@@ -43,6 +40,44 @@ const glitchLayer = keyframes`
   80% { clip-path: inset(40% 0 25% 0); transform: translate3d(-3px,1px,0); }
   100% { clip-path: inset(0 0 65% 0); transform: translate3d(0,0,0); }
 `;
+
+const heroContentReveal = keyframes`
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+`;
+
+const subtleGlitch = keyframes`
+  0% { transform: translateX(0); }
+  97% { transform: translateX(0); }
+  98% { transform: translateX(1px); opacity: 0.95; }
+  99% { transform: translateX(-1px); opacity: 0.98; }
+  100% { transform: translateX(0); opacity: 1; }
+`;
+
+// Custom hook para detectar quando um elemento entra na viewport
+// Usado para triggar animações baseadas no scroll
+function useInView() {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Diferente dos outros componentes, o Hero retriggará sempre
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.3, rootMargin: '0px' }, // Triggra quando 30% do Hero está visível
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isInView];
+}
 
 const tagOptions = [
   { label: 'React', icon: FaReact, color: '#00ffff' },
@@ -159,12 +194,19 @@ const HeroIntro = () => (
       >
         {'>'}
       </Box>
-      <Text as="span" lineHeight="1" display="inline-block">
+      <Text
+        as="span"
+        lineHeight="1"
+        display="inline-block"
+        animation={`${subtleGlitch} 8s ease-in-out infinite`}
+      >
         Desenvolvedor Full-Stack
       </Text>
     </Flex>
 
-    <GlitchHeading />
+    <Box pt={8}>
+      <GlitchHeading />
+    </Box>
 
     <Text
       fontSize={{ base: 'lg', md: '2xl' }}
@@ -172,15 +214,15 @@ const HeroIntro = () => (
       maxW="3xl"
       lineHeight="1.65"
     >
-      Desenvolvendo {' '}
+      Desenvolvendo{' '}
       <Box as="span" color={accent} fontWeight="semibold" display="inline">
         soluções digitais
       </Box>{' '}
-      que impactam, com {' '}
+      que impactam, com{' '}
       <Box as="span" color={accent} fontWeight="semibold" display="inline">
-        visão estratégica {' '}
+        visão estratégica{' '}
       </Box>
-       de quem entende o negócio além do código.
+      de quem entende o negócio além do código.
     </Text>
   </Stack>
 );
@@ -269,92 +311,117 @@ const HeroCtaGroup = () => (
     w={{ base: 'full', sm: 'auto' }}
     justify="center"
   >
-    <HeroPrimaryButton />
-    <HeroSecondaryButton />
+    <Box>
+      <HeroPrimaryButton />
+    </Box>
+    <Box>
+      <HeroSecondaryButton />
+    </Box>
   </HStack>
 );
 
 const HeroSocialLinks = () => (
   <HStack spacing={{ base: 4, md: 5 }} justify="center">
     {socialLinks.map(({ icon, label, href }) => (
-      <IconButton
-        key={label}
-        as="a"
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label}
-        size="lg"
-        borderRadius="lg"
-        w={{ base: '56px', md: '64px' }}
-        h={{ base: '56px', md: '64px' }}
-        bg="rgba(16,24,32,0.9)"
-        border="1px solid rgba(0,255,136,0.18)"
-        color="whiteAlpha.900"
-        boxShadow="0 18px 42px rgba(0,0,0,0.55)"
-        _hover={{
-          color: accent,
-          borderColor: 'rgba(0,255,136,0.4)',
-          transform: 'translateY(-3px)',
-        }}
-        _active={{ transform: 'translateY(0)' }}
-      >
-        <Icon as={icon} boxSize="22px" />
-      </IconButton>
+      <Box key={label}>
+        <IconButton
+          as="a"
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          size="lg"
+          borderRadius="lg"
+          w={{ base: '56px', md: '64px' }}
+          h={{ base: '56px', md: '64px' }}
+          bg="rgba(16,24,32,0.9)"
+          border="1px solid rgba(0,255,136,0.18)"
+          color="whiteAlpha.900"
+          boxShadow="0 18px 42px rgba(0,0,0,0.55)"
+          _hover={{
+            color: accent,
+            borderColor: 'rgba(0,255,136,0.4)',
+            transform: 'translateY(-3px)',
+          }}
+          _active={{ transform: 'translateY(0)' }}
+        >
+          <Icon as={icon} boxSize="22px" />
+        </IconButton>
+      </Box>
     ))}
   </HStack>
 );
 
-const Hero = () => (
-  <Box
-    id="sobre"
-    position="relative"
-    bg="#0A0E14"
-    color="white"
-    minH="100vh"
-    overflow="hidden"
-  >
-    <HeroBackground />
+const Hero = () => {
+  const [heroRef, heroInView] = useInView();
 
-    <Flex
-      direction="column"
-      align="center"
-      justify={{ base: 'space-between', md: 'space-between' }}
-      gap={{ base: 12, md: 0 }}
-      minH="100vh"
-      px={{ base: 6, sm: 10, lg: 20 }}
-      py={{ base: 14, md: 20, xl: 24 }}
-      pb={{ base: 20, md: 24 }}
+  return (
+    <Box
+      ref={heroRef}
+      id="sobre"
       position="relative"
-      zIndex={1}
+      bg="#0A0E14"
+      color="white"
+      minH="100vh"
+      overflow="hidden"
     >
-      <Stack
-        spacing={{ base: 9, md: 12 }}
-        align="center"
-        textAlign="center"
-        maxW="5xl"
-        w="full"
-        flex="1"
-        justify="center"
-      >
-        <HeroIntro />
-        <HeroTagList />
-        <HeroCtaGroup />
-        <HeroSocialLinks />
-      </Stack>
+      <HeroBackground />
 
-      <Stack align="center" mt={{ base: 6, md: 16 }}>
-        <ScrollIndicator
-          boxProps={{
-            borderColor: 'rgba(0,255,136,0.4)',
-            bg: 'rgba(16, 24, 32, 0.88)',
-            boxShadow: '0 0 40px rgba(0,255,136,0.3)',
+      <Flex
+        direction="column"
+        align="center"
+        justify={{ base: 'space-between', md: 'space-between' }}
+        gap={{ base: 12, md: 0 }}
+        minH="100vh"
+        px={{ base: 6, sm: 10, lg: 20 }}
+        py={{ base: 14, md: 20, xl: 24 }}
+        pb={{ base: 20, md: 24 }}
+        position="relative"
+        zIndex={1}
+      >
+        <Stack
+          spacing={{ base: 9, md: 12 }}
+          align="center"
+          textAlign="center"
+          maxW="5xl"
+          w="full"
+          flex="1"
+          justify="center"
+          css={{
+            animation: heroInView
+              ? `${heroContentReveal} 1.8s ease-out 0.3s both`
+              : 'none',
           }}
-          iconProps={{ color: accent, fontSize: '26px' }}
-        />
-      </Stack>
-    </Flex>
-  </Box>
-);
+          opacity={heroInView ? 1 : 0}
+        >
+          <HeroIntro />
+          <HeroTagList />
+          <HeroCtaGroup />
+          <HeroSocialLinks />
+        </Stack>
+
+        <Stack
+          align="center"
+          mt={{ base: 6, md: 16 }}
+          css={{
+            animation: heroInView
+              ? `${heroContentReveal} 1.2s ease-out 1.5s both`
+              : 'none',
+          }}
+          opacity={heroInView ? 1 : 0}
+        >
+          <ScrollIndicator
+            boxProps={{
+              borderColor: 'rgba(0,255,136,0.4)',
+              bg: 'rgba(16, 24, 32, 0.88)',
+              boxShadow: '0 0 40px rgba(0,255,136,0.3)',
+            }}
+            iconProps={{ color: accent, fontSize: '26px' }}
+          />
+        </Stack>
+      </Flex>
+    </Box>
+  );
+};
 
 export default Hero;

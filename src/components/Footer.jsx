@@ -8,7 +8,33 @@ import {
   IconButton,
   HStack,
 } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 import { FiGithub, FiLinkedin, FiMail, FiMusic } from 'react-icons/fi';
+
+// Custom hook para detectar quando um elemento entra na viewport
+// Usado para triggar animações baseadas no scroll
+function useInView() {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Igual ao Hero, retriggará sempre quando entrar/sair da viewport
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '50px' }, // Trigga 50px antes do elemento aparecer
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isInView];
+}
 
 const COLORS = {
   accent: '#2CFF99',
@@ -46,6 +72,10 @@ const SOCIAL_LINKS = [
 ];
 
 function Footer() {
+  const [footerRef, footerInView] = useInView();
+  const [socialRef, socialInView] = useInView();
+  const [copyrightRef, copyrightInView] = useInView();
+
   return (
     <Box
       as="footer"
@@ -57,43 +87,82 @@ function Footer() {
     >
       <Box maxW="7xl" mx="auto">
         <SimpleGrid
+          ref={footerRef}
           columns={{ base: 1, md: 3 }}
           gap={{ base: 10, md: 16 }}
           pb={{ base: 10, md: 12 }}
         >
-          <Stack spacing={4} maxW="sm">
+          <Stack
+            spacing={4}
+            maxW="sm"
+            animation={
+              footerInView
+                ? 'slide-from-left 800ms ease-out 100ms both'
+                : 'none'
+            }
+            opacity={footerInView ? 1 : 0}
+          >
             <Heading
               as="h3"
               fontSize={{ base: '2xl', md: '2xl' }}
               color={COLORS.accent}
               fontFamily="'JetBrains Mono', monospace"
+              animation={footerInView ? 'pulse 1s ease-out 500ms both' : 'none'}
             >
               Adriano Oliveira
             </Heading>
-            <Text color="whiteAlpha.700" lineHeight="1.8">
+            <Text
+              color="whiteAlpha.700"
+              lineHeight="1.8"
+              animation={
+                footerInView ? 'fade-in 700ms ease-out 700ms both' : 'none'
+              }
+              opacity={footerInView ? 1 : 0}
+            >
               Desenvolvedor full-stack com paixão por criar soluções que
               impactam. Da rua ao código.
             </Text>
           </Stack>
 
-          <Stack spacing={4} align={{ base: 'flex-start', md: 'flex-start' }}>
+          <Stack
+            spacing={4}
+            align={{ base: 'flex-start', md: 'flex-start' }}
+            animation={
+              footerInView
+                ? 'slide-from-bottom 800ms ease-out 300ms both'
+                : 'none'
+            }
+            opacity={footerInView ? 1 : 0}
+          >
             <Heading
               as="h4"
               fontSize="lg"
               color="whiteAlpha.900"
               fontFamily="'JetBrains Mono', monospace"
               letterSpacing="0.08em"
+              animation={
+                footerInView
+                  ? 'slide-from-top 600ms ease-out 600ms both'
+                  : 'none'
+              }
             >
               Links Rápidos
             </Heading>
             <Stack spacing={3}>
-              {QUICK_LINKS.map((link) => (
+              {QUICK_LINKS.map((link, index) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   color="whiteAlpha.700"
                   fontSize="sm"
                   transition="color 0.2s ease"
+                  // Animação escalonada para cada link
+                  animation={
+                    footerInView
+                      ? `scale-in 500ms ease-out ${800 + index * 150}ms both`
+                      : 'none'
+                  }
+                  opacity={footerInView ? 1 : 0}
                   _hover={{ color: COLORS.accent }}
                 >
                   {link.label}
@@ -102,18 +171,40 @@ function Footer() {
             </Stack>
           </Stack>
 
-          <Stack spacing={4} align={{ base: 'flex-start', md: 'flex-start' }}>
+          <Stack
+            spacing={4}
+            align={{ base: 'flex-start', md: 'flex-start' }}
+            animation={
+              footerInView
+                ? 'slide-from-right 800ms ease-out 500ms both'
+                : 'none'
+            }
+            opacity={footerInView ? 1 : 0}
+          >
             <Heading
               as="h4"
               fontSize="lg"
               color="whiteAlpha.900"
               fontFamily="'JetBrains Mono', monospace"
               letterSpacing="0.08em"
+              animation={
+                footerInView
+                  ? 'slide-from-top 600ms ease-out 800ms both'
+                  : 'none'
+              }
             >
               Conecte-se
             </Heading>
-            <HStack spacing={3}>
-              {SOCIAL_LINKS.map(({ id, label, href, icon }) => {
+            <HStack
+              marginTop="8px"
+              ref={socialRef}
+              spacing={3}
+              animation={
+                socialInView ? 'scale-in 600ms ease-out 1000ms both' : 'none'
+              }
+              opacity={socialInView ? 1 : 0}
+            >
+              {SOCIAL_LINKS.map(({ id, label, href, icon }, index) => {
                 const IconComponent = icon;
                 return (
                   <IconButton
@@ -135,6 +226,13 @@ function Footer() {
                     border={`1px solid ${COLORS.border}`}
                     color="whiteAlpha.800"
                     transition="all 0.2s ease"
+                    // Animação bounce individual para cada ícone social
+                    animation={
+                      socialInView
+                        ? `bounce 800ms ease-out ${1200 + index * 200}ms both`
+                        : 'none'
+                    }
+                    opacity={socialInView ? 1 : 0}
                     _hover={{
                       color: COLORS.accent,
                       borderColor: `${COLORS.accent}55`,
@@ -149,15 +247,29 @@ function Footer() {
           </Stack>
         </SimpleGrid>
 
-        <Box h="1px" w="full" bg={COLORS.border} borderRadius="full" />
+        <Box
+          h="1px"
+          w="full"
+          bg={COLORS.border}
+          borderRadius="full"
+          animation={
+            footerInView ? 'expand-width 1s ease-out 1600ms both' : 'none'
+          }
+          opacity={footerInView ? 1 : 0}
+        />
 
         <Text
+          ref={copyrightRef}
           mt={{ base: 8, md: 10 }}
           fontSize="sm"
           color="whiteAlpha.600"
           textAlign="center"
+          animation={
+            copyrightInView ? 'fade-in 800ms ease-out 200ms both' : 'none'
+          }
+          opacity={copyrightInView ? 1 : 0}
         >
-          © {new Date().getFullYear()} Adriano Oliveira 
+          © {new Date().getFullYear()} Adriano Oliveira
         </Text>
       </Box>
     </Box>

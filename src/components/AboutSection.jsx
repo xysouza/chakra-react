@@ -7,6 +7,7 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 // Ícones das tecnologias (react-icons)
 import { FaReact, FaNode, FaGitAlt } from 'react-icons/fa';
 import { SiTypescript, SiChakraui } from 'react-icons/si';
@@ -19,6 +20,31 @@ import {
 import { RiTailwindCssFill } from 'react-icons/ri';
 import { TbApi } from 'react-icons/tb';
 import { RxRocket } from 'react-icons/rx';
+
+// Custom hook para detectar quando um elemento entra na viewport
+// Usado para triggar animações baseadas no scroll
+function useInView() {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Igual ao Hero, retriggará sempre quando entrar/sair da viewport
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '50px' }, // Trigga 50px antes do elemento aparecer
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isInView];
+}
 
 // Paleta base usada em toda a tela (mantemos em um único lugar).
 const COLORS = {
@@ -52,7 +78,7 @@ const ABOUT_CARDS = [
     icon: GiCompass,
     accent: 'accent',
     description: [
-      'Minha jornada não começou em um escritório de tecnologia. Começou na área administrativa e nas ruas como motorista de aplicativo. Ali vi a urgência das pessoas, processos ineficientes e a necessidade de ferramentas que funcionem de verdade. Pragmatismo puro, forjado para resolver problemas reais. '
+      'Minha jornada não começou em um escritório de tecnologia. Começou na área administrativa e nas ruas como motorista de aplicativo. Ali vi a urgência das pessoas, processos ineficientes e a necessidade de ferramentas que funcionem de verdade. Pragmatismo puro, forjado para resolver problemas reais. ',
     ],
   },
   {
@@ -122,21 +148,47 @@ function Description({ chunks }) {
 }
 
 /**
- * Card individual com layout uniforme. O hover apenas eleva e acende a borda
- * com a cor correspondente (verde ou laranja) para manter consistência.
+ * Card individual com layout uniforme e animações baseadas no scroll.
+ * Cada card tem uma animação única baseada em sua posição.
  */
-function AboutCard({ icon, title, description, accent = 'accent' }) {
+function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
+  const [cardRef, isInView] = useInView();
   const accentColor = COLORS[accent];
   const accentTokens = ACCENT_TOKENS[accent];
 
+  // Diferentes animações para cada card baseado no índice
+  const getCardAnimation = (index) => {
+    const animations = [
+      'slide-from-left', // Card 1: vem da esquerda
+      'slide-from-right', // Card 2: vem da direita
+      'slide-from-bottom', // Card 3: vem de baixo
+      'scale-in', // Card 4: scale in
+    ];
+    return animations[index % animations.length];
+  };
+
+  const getAnimationDelay = (index) => {
+    return `${index * 200}ms`; // 200ms de delay entre cada card
+  };
+
   return (
     <Box
+      ref={cardRef}
       role="group"
       borderRadius="2xl"
       bg={COLORS.surface}
       border={`1px solid ${COLORS.cardBorder}`}
       boxShadow="0 18px 42px rgba(8,12,20,0.45)"
       transition="transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease"
+      // Animação nativa do Chakra UI v3
+      animation={
+        isInView
+          ? `${getCardAnimation(index)} 800ms ease-out ${getAnimationDelay(
+              index,
+            )} both`
+          : 'none'
+      }
+      opacity={isInView ? 1 : 0}
       _hover={{
         transform: 'translateY(-4px)',
         borderColor: `${accentColor}99`,
@@ -160,6 +212,12 @@ function AboutCard({ icon, title, description, accent = 'accent' }) {
           color={accentColor}
           transition="all 0.3s ease"
           boxShadow={`0 0 0 1px ${accentTokens.iconBg}`}
+          // Animação adicional do ícone com delay maior
+          animation={
+            isInView
+              ? `pulse 1s ease-in-out ${getAnimationDelay(index + 2)} both`
+              : 'none'
+          }
           _groupHover={{
             bg: accentTokens.iconHover,
             boxShadow: `0 0 14px ${accentTokens.glow}`,
@@ -173,6 +231,15 @@ function AboutCard({ icon, title, description, accent = 'accent' }) {
           fontSize={{ base: 'lg', md: 'xl' }}
           fontFamily="'JetBrains Mono', monospace"
           color="white"
+          // Animação do título com delay adicional
+          animation={
+            isInView
+              ? `slide-from-top 700ms ease-out ${
+                  parseInt(getAnimationDelay(index)) + 300
+                }ms both`
+              : 'none'
+          }
+          opacity={isInView ? 1 : 0}
         >
           {title}
         </Heading>
@@ -184,9 +251,9 @@ function AboutCard({ icon, title, description, accent = 'accent' }) {
 }
 
 /**
- * Faixa com as tecnologias (badges). Mantivemos Flex simples para controlar wrap e hover.
+ * Faixa com as tecnologias (badges) com animação escalonada.
  */
-function TechBadgeRow() {
+function TechBadgeRow({ isVisible = false }) {
   return (
     <Flex
       wrap="wrap"
@@ -197,7 +264,7 @@ function TechBadgeRow() {
       mx="auto"
       pt={{ base: 4, md: 6 }}
     >
-      {TECH_STACK.map(({ label, icon, color }) => (
+      {TECH_STACK.map(({ label, icon, color }, index) => (
         <Flex
           key={label}
           px={{ base: 5, md: 6 }}
@@ -214,6 +281,13 @@ function TechBadgeRow() {
           transition="all 0.25s ease"
           align="center"
           gap={3}
+          // Animação escalonada para cada badge
+          animation={
+            isVisible
+              ? `scale-in 600ms ease-out ${index * 100 + 200}ms both`
+              : 'none'
+          }
+          opacity={isVisible ? 1 : 0}
           _hover={{
             borderColor: color || 'rgba(44,255,153,0.55)',
             boxShadow: `0 10px 28px ${
@@ -232,6 +306,9 @@ function TechBadgeRow() {
 
 // Componente principal exportado para uso no App.jsx
 function AboutSection() {
+  const [titleRef, titleInView] = useInView();
+  const [techRef, techInView] = useInView();
+
   return (
     <Box
       as="section"
@@ -241,11 +318,14 @@ function AboutSection() {
       bgGradient="linear(180deg, rgba(10,14,20,0.7) 0%, rgba(10,14,20,0.92) 55%, rgba(10,14,20,1) 100%)"
     >
       <Stack
+        ref={titleRef}
         spacing={4}
         textAlign="center"
         maxW="5xl"
         mx="auto"
         mb={{ base: 12, md: 16 }}
+        animation={titleInView ? 'fade-in 1s ease-out both' : 'none'}
+        opacity={titleInView ? 1 : 0}
       >
         <Heading
           as="h2"
@@ -273,12 +353,21 @@ function AboutSection() {
         maxW="6xl"
         mx="auto"
       >
-        {ABOUT_CARDS.map((card) => (
-          <AboutCard key={card.id} {...card} />
+        {ABOUT_CARDS.map((card, index) => (
+          <AboutCard key={card.id} {...card} index={index} />
         ))}
       </SimpleGrid>
 
-      <Stack spacing={6} align="center" mt={{ base: 16, md: 20 }}>
+      <Stack
+        ref={techRef}
+        spacing={6}
+        align="center"
+        mt={{ base: 16, md: 20 }}
+        animation={
+          techInView ? 'slide-from-bottom 1s ease-out 400ms both' : 'none'
+        }
+        opacity={techInView ? 1 : 0}
+      >
         <Heading
           as="h3"
           fontSize={{ base: '2xl', md: '3xl' }}
@@ -289,7 +378,7 @@ function AboutSection() {
         >
           Stack & Ferramentas
         </Heading>
-        <TechBadgeRow />
+        <TechBadgeRow isVisible={techInView} />
       </Stack>
     </Box>
   );

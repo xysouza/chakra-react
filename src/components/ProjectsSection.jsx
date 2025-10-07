@@ -8,6 +8,7 @@ import {
   Icon,
   Button,
 } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 import {
   FiShoppingBag,
   FiUsers,
@@ -15,6 +16,31 @@ import {
   FiGithub,
   FiClock,
 } from 'react-icons/fi';
+
+// Custom hook para detectar quando um elemento entra na viewport
+// Usado para triggar animações baseadas no scroll
+function useInView() {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Igual ao Hero, retriggará sempre quando entrar/sair da viewport
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '100px' }, // Trigga 100px antes do elemento aparecer
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isInView];
+}
 
 const COLORS = {
   accent: '#2CFF99',
@@ -83,7 +109,12 @@ const PROJECTS = [
   },
 ];
 
-function ProjectBadge({ children, accent = 'accent' }) {
+function ProjectBadge({
+  children,
+  accent = 'accent',
+  isVisible = false,
+  delay = '0ms',
+}) {
   const color = COLORS[accent] ?? COLORS.accent;
 
   return (
@@ -99,13 +130,16 @@ function ProjectBadge({ children, accent = 'accent' }) {
       color={color}
       bg="rgba(255,255,255,0.02)"
       border={`1px solid ${COLORS.badgeBorder}`}
+      animation={isVisible ? `scale-in 500ms ease-out ${delay} both` : 'none'}
+      opacity={isVisible ? 1 : 0}
     >
       {children}
     </Box>
   );
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, index = 0 }) {
+  const [cardRef, isInView] = useInView();
   const {
     title,
     badge,
@@ -119,14 +153,38 @@ function ProjectCard({ project }) {
   const accentColor = COLORS[accent] ?? COLORS.accent;
   const accentTokens = ACCENT_TOKENS[accent] ?? ACCENT_TOKENS.accent;
 
+  // Diferentes animações para cada card baseado no índice
+  const getCardAnimation = (index) => {
+    const animations = [
+      'slide-from-bottom', // Card 1: vem de baixo
+      'slide-from-left', // Card 2: vem da esquerda
+      'slide-from-right', // Card 3: vem da direita
+    ];
+    return animations[index % animations.length];
+  };
+
+  const getAnimationDelay = (index) => {
+    return `${index * 250}ms`; // 250ms de delay entre cada card
+  };
+
   return (
     <Box
+      ref={cardRef}
       role="group"
       borderRadius="2xl"
       bg={COLORS.surface}
       border={`1px solid ${COLORS.cardBorder}`}
       boxShadow="0 18px 42px rgba(8,12,20,0.45)"
       transition="transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease"
+      // Animação nativa do Chakra UI v3
+      animation={
+        isInView
+          ? `${getCardAnimation(index)} 900ms ease-out ${getAnimationDelay(
+              index,
+            )} both`
+          : 'none'
+      }
+      opacity={isInView ? 1 : 0}
       _hover={{
         transform: 'translateY(-4px)',
         borderColor: `${accentColor}99`,
@@ -152,6 +210,14 @@ function ProjectCard({ project }) {
             color={accentColor}
             boxShadow={`0 0 0 1px ${accentTokens.iconBg}`}
             transition="all 0.3s ease"
+            // Animação do ícone com delay adicional
+            animation={
+              isInView
+                ? `bounce 1s ease-out ${
+                    parseInt(getAnimationDelay(index)) + 400
+                  }ms both`
+                : 'none'
+            }
             _groupHover={{
               bg: accentTokens.iconHover,
               boxShadow: `0 0 16px ${accentTokens.glow}`,
@@ -167,14 +233,41 @@ function ProjectCard({ project }) {
               color="white"
               lineHeight="1.25"
               noOfLines={2}
+              // Animação do título
+              animation={
+                isInView
+                  ? `slide-from-top 700ms ease-out ${
+                      parseInt(getAnimationDelay(index)) + 200
+                    }ms both`
+                  : 'none'
+              }
+              opacity={isInView ? 1 : 0}
             >
               {title}
             </Heading>
-            <ProjectBadge accent={accent}>{badge}</ProjectBadge>
+            <ProjectBadge
+              accent={accent}
+              isVisible={isInView}
+              delay={`${parseInt(getAnimationDelay(index)) + 300}ms`}
+            >
+              {badge}
+            </ProjectBadge>
           </Stack>
         </Flex>
 
-        <Text fontSize="sm" lineHeight="1.8" color="whiteAlpha.800">
+        <Text
+          fontSize="sm"
+          lineHeight="1.8"
+          color="whiteAlpha.800"
+          animation={
+            isInView
+              ? `fade-in 800ms ease-out ${
+                  parseInt(getAnimationDelay(index)) + 500
+                }ms both`
+              : 'none'
+          }
+          opacity={isInView ? 1 : 0}
+        >
           {description}
         </Text>
 
@@ -185,7 +278,7 @@ function ProjectCard({ project }) {
           minH={CARD_LAYOUT.techRowMinH}
           alignContent="flex-start"
         >
-          {techStack.map((tech) => (
+          {techStack.map((tech, techIndex) => (
             <Flex
               key={tech}
               px={4}
@@ -198,6 +291,15 @@ function ProjectCard({ project }) {
               textTransform="uppercase"
               color="whiteAlpha.900"
               border={`1px solid ${COLORS.badgeBorder}`}
+              // Animação escalonada para cada tech badge
+              animation={
+                isInView
+                  ? `scale-in 400ms ease-out ${
+                      parseInt(getAnimationDelay(index)) + 600 + techIndex * 100
+                    }ms both`
+                  : 'none'
+              }
+              opacity={isInView ? 1 : 0}
             >
               {tech}
             </Flex>
@@ -217,6 +319,15 @@ function ProjectCard({ project }) {
           color="whiteAlpha.900"
           cursor="not-allowed"
           aria-disabled="true"
+          // Animação do botão por último
+          animation={
+            isInView
+              ? `slide-from-bottom 600ms ease-out ${
+                  parseInt(getAnimationDelay(index)) + 900
+                }ms both`
+              : 'none'
+          }
+          opacity={isInView ? 1 : 0}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -237,6 +348,9 @@ function ProjectCard({ project }) {
 }
 
 function ProjectsSection() {
+  const [titleRef, titleInView] = useInView();
+  const [githubRef, githubInView] = useInView();
+
   return (
     <Box
       as="section"
@@ -246,11 +360,14 @@ function ProjectsSection() {
       bgGradient="linear(180deg, rgba(10,14,20,0.9) 0%, rgba(10,14,20,1) 65%, rgba(10,14,20,1) 100%)"
     >
       <Stack
+        ref={titleRef}
         spacing={4}
         textAlign="center"
         maxW="4xl"
         mx="auto"
         mb={{ base: 14, md: 20 }}
+        animation={titleInView ? 'fade-in 1s ease-out both' : 'none'}
+        opacity={titleInView ? 1 : 0}
       >
         <Heading
           as="h2"
@@ -273,16 +390,26 @@ function ProjectsSection() {
         maxW="7xl"
         mx="auto"
       >
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {PROJECTS.map((project, index) => (
+          <ProjectCard key={project.id} project={project} index={index} />
         ))}
       </SimpleGrid>
 
-      <Stack spacing={4} align="center" mt={{ base: 16, md: 20 }}>
+      <Stack
+        ref={githubRef}
+        spacing={4}
+        align="center"
+        mt={{ base: 16, md: 20 }}
+        animation={
+          githubInView ? 'slide-from-bottom 1s ease-out 300ms both' : 'none'
+        }
+        opacity={githubInView ? 1 : 0}
+      >
         <Text fontSize="sm" color="whiteAlpha.600">
           Quer ver mais? Confira todos os projetos no meu GitHub.
         </Text>
         <Button
+          marginTop="16px"
           as="a"
           href="#"
           target="_blank"
@@ -298,6 +425,9 @@ function ProjectsSection() {
           border="1px solid rgba(44,255,153,0.45)"
           color={COLORS.accent}
           transition="all 0.25s ease"
+          // Animação especial para o botão GitHub
+          animation={githubInView ? 'bounce 1.2s ease-out 600ms both' : 'none'}
+          opacity={githubInView ? 1 : 0}
           _hover={{
             bg: 'rgba(44,255,153,0.12)',
             boxShadow: '0 14px 36px rgba(44,255,153,0.26)',
