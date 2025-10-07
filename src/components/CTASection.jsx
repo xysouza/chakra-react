@@ -299,7 +299,7 @@ function CTASection() {
         <Button
           as="a"
           marginTop="8px"
-          href="https://wa.me/5581987352002?text=Ol%C3%A1%20Adriel%2C%20vim%20do%20seu%20portf%C3%B3lio!"
+          href="https://wa.me/5581987352002?text=Ol%C3%A1%20Adriano%2C%20vim%20do%20seu%20portf%C3%B3lio!"
           target="_blank"
           rel="noopener noreferrer"
           borderRadius="full"
