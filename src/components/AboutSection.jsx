@@ -33,7 +33,7 @@ function useInView() {
         // Igual ao Hero, retriggará sempre quando entrar/sair da viewport
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.1, rootMargin: '50px' }, // Trigga 50px antes do elemento aparecer
+      { threshold: 0.15, rootMargin: '80px' }, // Threshold maior e rootMargin maior para detecção mais agressiva
     );
 
     if (ref.current) {
@@ -149,9 +149,10 @@ function Description({ chunks }) {
 
 /**
  * Card individual com layout uniforme e animações baseadas no scroll.
- * Cada card tem uma animação única baseada em sua posição.
+ * Cada card tem uma animação única baseada em sua posição e seu próprio detector de viewport.
  */
 function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
+  // Cada card tem seu próprio detector de viewport para melhor performance
   const [cardRef, isInView] = useInView();
   const accentColor = COLORS[accent];
   const accentTokens = ACCENT_TOKENS[accent];
@@ -159,16 +160,17 @@ function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
   // Diferentes animações para cada card baseado no índice
   const getCardAnimation = (index) => {
     const animations = [
-      'slide-from-left', // Card 1: vem da esquerda
-      'slide-from-right', // Card 2: vem da direita
-      'slide-from-bottom', // Card 3: vem de baixo
-      'scale-in', // Card 4: scale in
+      'slide-from-left', // Card 1: A Origem - vem da esquerda
+      'slide-from-right', // Card 2: A Virada - vem da direita
+      'slide-from-left', // Card 3: O Arsenal - vem da esquerda (igual ao primeiro)
+      'slide-from-right', // Card 4: A Missão - vem da direita (igual ao segundo)
     ];
     return animations[index % animations.length];
   };
 
   const getAnimationDelay = (index) => {
-    return `${index * 200}ms`; // 200ms de delay entre cada card
+    // Delay menor para animações mais responsivas
+    return `${Math.min(index * 150, 300)}ms`; // Máximo 300ms de delay
   };
 
   return (
@@ -212,10 +214,10 @@ function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
           color={accentColor}
           transition="all 0.3s ease"
           boxShadow={`0 0 0 1px ${accentTokens.iconBg}`}
-          // Animação adicional do ícone com delay maior
+          // Animação adicional do ícone com delay menor
           animation={
             isInView
-              ? `pulse 1s ease-in-out ${getAnimationDelay(index + 2)} both`
+              ? `pulse 1s ease-in-out ${getAnimationDelay(index + 1)} both`
               : 'none'
           }
           _groupHover={{
@@ -231,11 +233,11 @@ function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
           fontSize={{ base: 'lg', md: 'xl' }}
           fontFamily="'JetBrains Mono', monospace"
           color="white"
-          // Animação do título com delay adicional
+          // Animação do título com delay menor
           animation={
             isInView
-              ? `slide-from-top 700ms ease-out ${
-                  parseInt(getAnimationDelay(index)) + 300
+              ? `slide-from-top 600ms ease-out ${
+                  parseInt(getAnimationDelay(index)) + 200
                 }ms both`
               : 'none'
           }

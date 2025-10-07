@@ -210,10 +210,10 @@ function ProjectCard({ project, index = 0 }) {
             color={accentColor}
             boxShadow={`0 0 0 1px ${accentTokens.iconBg}`}
             transition="all 0.3s ease"
-            // Animação do ícone com delay adicional
+            // Animação mais suave do ícone - usando fade-in + scale
             animation={
               isInView
-                ? `bounce 1s ease-out ${
+                ? `scale-in 600ms ease-out ${
                     parseInt(getAnimationDelay(index)) + 400
                   }ms both`
                 : 'none'
@@ -221,6 +221,7 @@ function ProjectCard({ project, index = 0 }) {
             _groupHover={{
               bg: accentTokens.iconHover,
               boxShadow: `0 0 16px ${accentTokens.glow}`,
+              transform: 'scale(1.05)',
             }}
           >
             <Icon as={icon} fontSize="24px" />
