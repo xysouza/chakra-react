@@ -79,13 +79,3 @@ npm run lint     # análise estática com ESLint
 - **Conteúdo**: textos e dados estão centralizados em arrays como `ABOUT_CARDS`, `CONTACT_METHODS` e `PROJECTS`.
 - **Animações**: keyframes adicionais podem ser criados com Emotion dentro de cada componente ou no tema global.
 
-## 🧭 Roadmap Sugerido
-
-- [ ] Unificar o `useInView` em um hook compartilhado.
-- [ ] Centralizar tokens de cor em um módulo dedicado.
-- [ ] Adicionar testes de snapshot para garantir estabilidade das seções.
-- [ ] Integrar dados de projetos via CMS/JSON externo.
-
-## 📄 Licença
-
-Distribuído sob a licença MIT. Sinta-se à vontade para clonar, adaptar e aprimorar este portfólio.
