@@ -15,6 +15,7 @@ import { FiMenu } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa6';
 import { useMemo, useState, useEffect } from 'react';
 import { keyframes } from '@emotion/react';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 // Animações para o drawer mobile
 const slideInRight = keyframes`
@@ -78,13 +79,9 @@ const Nav = () => {
   // Função para navegação suave entre seções
   const handleSmoothScroll = (href) => {
     if (href.startsWith('#')) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
-      }
+      // Ajuste de offset para sticky header (~64px)
+      const offset = 72;
+      smoothScrollTo(href, { duration: 650, offset, updateHash: true });
     }
     setIsOpen(false); // Fecha o drawer se estiver aberto
   };

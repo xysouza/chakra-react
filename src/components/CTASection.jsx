@@ -128,10 +128,10 @@ function ContactCard({
           color={COLORS.accent}
           transition="background 0.3s ease, box-shadow 0.3s ease"
           boxShadow="0 0 0 1px rgba(44,255,153,0.2)"
-          // Animação do ícone com delay adicional
+          // Entrada limpa do ícone
           animation={
             isVisible
-              ? `pulse 1s ease-out ${
+              ? `scale-in 500ms ease-out ${
                   parseInt(getAnimationDelay(index)) + 300
                 }ms both`
               : 'none'
@@ -176,7 +176,7 @@ function ContactCard({
               // Animação do link
               animation={
                 isVisible
-                  ? `fade-in 700ms ease-out ${
+                  ? `fade-in 600ms ease-out ${
                       parseInt(getAnimationDelay(index)) + 400
                     }ms both`
                   : 'none'
@@ -191,7 +191,7 @@ function ContactCard({
               color="whiteAlpha.700"
               animation={
                 isVisible
-                  ? `fade-in 700ms ease-out ${
+                  ? `fade-in 600ms ease-out ${
                       parseInt(getAnimationDelay(index)) + 400
                     }ms both`
                   : 'none'
@@ -239,7 +239,7 @@ function CTASection() {
         mx="auto"
         position="relative"
         zIndex={1}
-        animation={titleInView ? 'fade-in 1s ease-out both' : 'none'}
+        animation={titleInView ? 'fade-in 700ms ease-out both' : 'none'}
         opacity={titleInView ? 1 : 0}
       >
         <Heading
@@ -289,7 +289,9 @@ function CTASection() {
         position="relative"
         zIndex={1}
         animation={
-          whatsappInView ? 'slide-from-bottom 1s ease-out 200ms both' : 'none'
+          whatsappInView
+            ? 'slide-from-bottom 700ms ease-out 200ms both'
+            : 'none'
         }
         opacity={whatsappInView ? 1 : 0}
       >

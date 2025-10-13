@@ -155,16 +155,14 @@ function ProjectCard({ project, index = 0 }) {
 
   // Diferentes animações para cada card baseado no índice
   const getCardAnimation = (index) => {
-    const animations = [
-      'slide-from-bottom', // Card 1: vem de baixo
-      'slide-from-left', // Card 2: vem da esquerda
-      'slide-from-right', // Card 3: vem da direita
-    ];
+    // Alternância simples esquerda/direita como na seção Sobre
+    const animations = ['slide-from-left', 'slide-from-right'];
     return animations[index % animations.length];
   };
 
   const getAnimationDelay = (index) => {
-    return `${index * 250}ms`; // 250ms de delay entre cada card
+    // Padroniza com a seção Sobre: 150ms de stagger, máx. 300ms
+    return `${Math.min(index * 150, 300)}ms`;
   };
 
   return (
@@ -179,7 +177,7 @@ function ProjectCard({ project, index = 0 }) {
       // Animação nativa do Chakra UI v3
       animation={
         isInView
-          ? `${getCardAnimation(index)} 900ms ease-out ${getAnimationDelay(
+          ? `${getCardAnimation(index)} 700ms ease-out ${getAnimationDelay(
               index,
             )} both`
           : 'none'
@@ -210,11 +208,11 @@ function ProjectCard({ project, index = 0 }) {
             color={accentColor}
             boxShadow={`0 0 0 1px ${accentTokens.iconBg}`}
             transition="all 0.3s ease"
-            // Animação mais suave do ícone - usando fade-in + scale
+            // Entrada limpa do ícone
             animation={
               isInView
-                ? `scale-in 600ms ease-out ${
-                    parseInt(getAnimationDelay(index)) + 400
+                ? `scale-in 500ms ease-out ${
+                    parseInt(getAnimationDelay(index)) + 280
                   }ms both`
                 : 'none'
             }
@@ -234,11 +232,11 @@ function ProjectCard({ project, index = 0 }) {
               color="white"
               lineHeight="1.25"
               noOfLines={2}
-              // Animação do título
+              // Animação do título (rápida)
               animation={
                 isInView
-                  ? `slide-from-top 700ms ease-out ${
-                      parseInt(getAnimationDelay(index)) + 200
+                  ? `slide-from-top 500ms ease-out ${
+                      parseInt(getAnimationDelay(index)) + 150
                     }ms both`
                   : 'none'
               }
@@ -262,8 +260,8 @@ function ProjectCard({ project, index = 0 }) {
           color="whiteAlpha.800"
           animation={
             isInView
-              ? `fade-in 800ms ease-out ${
-                  parseInt(getAnimationDelay(index)) + 500
+              ? `fade-in 600ms ease-out ${
+                  parseInt(getAnimationDelay(index)) + 450
                 }ms both`
               : 'none'
           }
@@ -292,11 +290,11 @@ function ProjectCard({ project, index = 0 }) {
               textTransform="uppercase"
               color="whiteAlpha.900"
               border={`1px solid ${COLORS.badgeBorder}`}
-              // Animação escalonada para cada tech badge
+              // Animação escalonada para cada tech badge (padrão 450ms + stagger 90ms)
               animation={
                 isInView
-                  ? `scale-in 400ms ease-out ${
-                      parseInt(getAnimationDelay(index)) + 600 + techIndex * 100
+                  ? `scale-in 450ms ease-out ${
+                      parseInt(getAnimationDelay(index)) + 500 + techIndex * 90
                     }ms both`
                   : 'none'
               }
@@ -367,7 +365,7 @@ function ProjectsSection() {
         maxW="4xl"
         mx="auto"
         mb={{ base: 14, md: 20 }}
-        animation={titleInView ? 'fade-in 1s ease-out both' : 'none'}
+        animation={titleInView ? 'fade-in 700ms ease-out both' : 'none'}
         opacity={titleInView ? 1 : 0}
       >
         <Heading
@@ -402,7 +400,7 @@ function ProjectsSection() {
         align="center"
         mt={{ base: 16, md: 20 }}
         animation={
-          githubInView ? 'slide-from-bottom 1s ease-out 300ms both' : 'none'
+          githubInView ? 'slide-from-bottom 700ms ease-out 250ms both' : 'none'
         }
         opacity={githubInView ? 1 : 0}
       >
@@ -426,8 +424,10 @@ function ProjectsSection() {
           border="1px solid rgba(44,255,153,0.45)"
           color={COLORS.accent}
           transition="all 0.25s ease"
-          // Animação especial para o botão GitHub
-          animation={githubInView ? 'bounce 1.2s ease-out 600ms both' : 'none'}
+          // Entrada limpa do botão GitHub
+          animation={
+            githubInView ? 'scale-in 550ms ease-out 550ms both' : 'none'
+          }
           opacity={githubInView ? 1 : 0}
           _hover={{
             bg: 'rgba(44,255,153,0.12)',

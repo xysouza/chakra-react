@@ -97,7 +97,7 @@ function Footer() {
             maxW="sm"
             animation={
               footerInView
-                ? 'slide-from-left 800ms ease-out 100ms both'
+                ? 'slide-from-left 700ms ease-out 100ms both'
                 : 'none'
             }
             opacity={footerInView ? 1 : 0}
@@ -107,7 +107,9 @@ function Footer() {
               fontSize={{ base: '2xl', md: '2xl' }}
               color={COLORS.accent}
               fontFamily="'JetBrains Mono', monospace"
-              animation={footerInView ? 'pulse 1s ease-out 500ms both' : 'none'}
+              animation={
+                footerInView ? 'fade-in 600ms ease-out 300ms both' : 'none'
+              }
             >
               Adriano Oliveira
             </Heading>
@@ -115,7 +117,7 @@ function Footer() {
               color="whiteAlpha.700"
               lineHeight="1.8"
               animation={
-                footerInView ? 'fade-in 700ms ease-out 700ms both' : 'none'
+                footerInView ? 'fade-in 600ms ease-out 600ms both' : 'none'
               }
               opacity={footerInView ? 1 : 0}
             >
@@ -129,7 +131,7 @@ function Footer() {
             align={{ base: 'flex-start', md: 'flex-start' }}
             animation={
               footerInView
-                ? 'slide-from-bottom 800ms ease-out 300ms both'
+                ? 'slide-from-bottom 650ms ease-out 300ms both'
                 : 'none'
             }
             opacity={footerInView ? 1 : 0}
@@ -142,7 +144,7 @@ function Footer() {
               letterSpacing="0.08em"
               animation={
                 footerInView
-                  ? 'slide-from-top 600ms ease-out 600ms both'
+                  ? 'slide-from-top 500ms ease-out 500ms both'
                   : 'none'
               }
             >
@@ -159,7 +161,7 @@ function Footer() {
                   // Animação escalonada para cada link
                   animation={
                     footerInView
-                      ? `scale-in 500ms ease-out ${800 + index * 150}ms both`
+                      ? `scale-in 450ms ease-out ${700 + index * 140}ms both`
                       : 'none'
                   }
                   opacity={footerInView ? 1 : 0}
@@ -176,7 +178,7 @@ function Footer() {
             align={{ base: 'flex-start', md: 'flex-start' }}
             animation={
               footerInView
-                ? 'slide-from-right 800ms ease-out 500ms both'
+                ? 'slide-from-right 700ms ease-out 450ms both'
                 : 'none'
             }
             opacity={footerInView ? 1 : 0}
@@ -189,7 +191,7 @@ function Footer() {
               letterSpacing="0.08em"
               animation={
                 footerInView
-                  ? 'slide-from-top 600ms ease-out 800ms both'
+                  ? 'slide-from-top 500ms ease-out 700ms both'
                   : 'none'
               }
             >
@@ -200,7 +202,7 @@ function Footer() {
               ref={socialRef}
               spacing={3}
               animation={
-                socialInView ? 'scale-in 600ms ease-out 1000ms both' : 'none'
+                socialInView ? 'scale-in 500ms ease-out 900ms both' : 'none'
               }
               opacity={socialInView ? 1 : 0}
             >
@@ -226,10 +228,10 @@ function Footer() {
                     border={`1px solid ${COLORS.border}`}
                     color="whiteAlpha.800"
                     transition="all 0.2s ease"
-                    // Animação bounce individual para cada ícone social
+                    // Entrada limpa dos ícones sociais
                     animation={
                       socialInView
-                        ? `bounce 800ms ease-out ${1200 + index * 200}ms both`
+                        ? `scale-in 500ms ease-out ${900 + index * 140}ms both`
                         : 'none'
                     }
                     opacity={socialInView ? 1 : 0}

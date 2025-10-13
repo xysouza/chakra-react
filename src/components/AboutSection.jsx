@@ -185,7 +185,7 @@ function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
       // Animação nativa do Chakra UI v3
       animation={
         isInView
-          ? `${getCardAnimation(index)} 800ms ease-out ${getAnimationDelay(
+          ? `${getCardAnimation(index)} 700ms ease-out ${getAnimationDelay(
               index,
             )} both`
           : 'none'
@@ -214,10 +214,10 @@ function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
           color={accentColor}
           transition="all 0.3s ease"
           boxShadow={`0 0 0 1px ${accentTokens.iconBg}`}
-          // Animação adicional do ícone com delay menor
+          // Entrada limpa do ícone
           animation={
             isInView
-              ? `pulse 1s ease-in-out ${getAnimationDelay(index + 1)} both`
+              ? `scale-in 500ms ease-out ${getAnimationDelay(index + 1)} both`
               : 'none'
           }
           _groupHover={{
@@ -236,8 +236,8 @@ function AboutCard({ icon, title, description, accent = 'accent', index = 0 }) {
           // Animação do título com delay menor
           animation={
             isInView
-              ? `slide-from-top 600ms ease-out ${
-                  parseInt(getAnimationDelay(index)) + 200
+              ? `slide-from-top 500ms ease-out ${
+                  parseInt(getAnimationDelay(index)) + 150
                 }ms both`
               : 'none'
           }
@@ -283,12 +283,13 @@ function TechBadgeRow({ isVisible = false }) {
           transition="all 0.25s ease"
           align="center"
           gap={3}
-          // Animação escalonada para cada badge
+          // Entrada limpa para cada badge (reduz flicker)
           animation={
             isVisible
-              ? `scale-in 600ms ease-out ${index * 100 + 200}ms both`
+              ? `fade-in 450ms ease-out ${index * 80 + 120}ms both`
               : 'none'
           }
+          willChange="opacity, transform"
           opacity={isVisible ? 1 : 0}
           _hover={{
             borderColor: color || 'rgba(44,255,153,0.55)',
@@ -310,6 +311,13 @@ function TechBadgeRow({ isVisible = false }) {
 function AboutSection() {
   const [titleRef, titleInView] = useInView();
   const [techRef, techInView] = useInView();
+  const [badgesOnce, setBadgesOnce] = useState(false);
+
+  // Evita flicker: depois que as badges aparecerem uma vez, mantemos visíveis
+  // mesmo que o IntersectionObserver oscile perto do limiar.
+  useEffect(() => {
+    if (techInView && !badgesOnce) setBadgesOnce(true);
+  }, [techInView, badgesOnce]);
 
   return (
     <Box
@@ -326,7 +334,7 @@ function AboutSection() {
         maxW="5xl"
         mx="auto"
         mb={{ base: 12, md: 16 }}
-        animation={titleInView ? 'fade-in 1s ease-out both' : 'none'}
+        animation={titleInView ? 'fade-in 600ms ease-out both' : 'none'}
         opacity={titleInView ? 1 : 0}
       >
         <Heading
@@ -365,9 +373,7 @@ function AboutSection() {
         spacing={6}
         align="center"
         mt={{ base: 16, md: 20 }}
-        animation={
-          techInView ? 'slide-from-bottom 1s ease-out 400ms both' : 'none'
-        }
+        animation={techInView ? 'fade-in 600ms ease-out 200ms both' : 'none'}
         opacity={techInView ? 1 : 0}
       >
         <Heading
@@ -380,7 +386,7 @@ function AboutSection() {
         >
           Stack & Ferramentas
         </Heading>
-        <TechBadgeRow isVisible={techInView} />
+        <TechBadgeRow isVisible={badgesOnce} />
       </Stack>
     </Box>
   );

@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { keyframes } from '@emotion/react';
+import { smoothScrollTo } from '../utils/smoothScroll';
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { FaReact, FaNodeJs } from 'react-icons/fa';
 import { TbBrandReactNative } from 'react-icons/tb';
@@ -276,6 +277,14 @@ const HeroPrimaryButton = () => (
       transform: 'translateY(-3px)',
     }}
     _active={{ transform: 'translateY(0)' }}
+    onClick={(e) => {
+      e.preventDefault();
+      smoothScrollTo('#projetos', {
+        duration: 650,
+        offset: 72,
+        updateHash: true,
+      });
+    }}
   >
     Ver Projetos
   </Button>
@@ -298,6 +307,10 @@ const HeroSecondaryButton = () => (
     _hover={{
       borderColor: 'rgba(0,255,136,0.32)',
       bg: 'rgba(22,30,40,0.94)',
+    }}
+    onClick={(e) => {
+      e.preventDefault();
+      smoothScrollTo('#sobre', { duration: 650, offset: 72, updateHash: true });
     }}
   >
     Sobre Mim
@@ -358,7 +371,7 @@ const Hero = () => {
   return (
     <Box
       ref={heroRef}
-      id="sobre"
+      id="hero"
       position="relative"
       bg="#0A0E14"
       color="white"
@@ -389,7 +402,7 @@ const Hero = () => {
           justify="center"
           css={{
             animation: heroInView
-              ? `${heroContentReveal} 1.8s ease-out 0.3s both`
+              ? `${heroContentReveal} 800ms ease-out 150ms both`
               : 'none',
           }}
           opacity={heroInView ? 1 : 0}
@@ -405,16 +418,46 @@ const Hero = () => {
           mt={{ base: 6, md: 16 }}
           css={{
             animation: heroInView
-              ? `${heroContentReveal} 1.2s ease-out 1.5s both`
+              ? `${heroContentReveal} 600ms ease-out 700ms both`
               : 'none',
           }}
           opacity={heroInView ? 1 : 0}
         >
           <ScrollIndicator
+            role="button"
+            tabIndex={0}
+            aria-label="Ir para a seção Sobre"
+            onClick={() =>
+              smoothScrollTo('#sobre', {
+                duration: 650,
+                offset: 72,
+                updateHash: true,
+              })
+            }
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                smoothScrollTo('#sobre', {
+                  duration: 650,
+                  offset: 72,
+                  updateHash: true,
+                });
+              }
+            }}
             boxProps={{
               borderColor: 'rgba(0,255,136,0.4)',
               bg: 'rgba(16, 24, 32, 0.88)',
               boxShadow: '0 0 40px rgba(0,255,136,0.3)',
+              cursor: 'pointer',
+              transition:
+                'transform .2s ease, box-shadow .2s ease, filter .2s ease',
+              _hover: {
+                transform: 'translateY(-2px) scale(1.03)',
+                boxShadow: '0 0 54px rgba(0,255,136,0.44)',
+              },
+              _active: {
+                transform: 'translateY(0) scale(0.98)',
+              },
             }}
             iconProps={{ color: accent, fontSize: '26px' }}
           />
