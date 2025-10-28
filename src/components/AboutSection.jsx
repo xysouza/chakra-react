@@ -9,10 +9,9 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 // Ícones das tecnologias (react-icons)
-import { FaReact, FaNode, FaGitAlt } from 'react-icons/fa';
-import { SiTypescript, SiChakraui } from 'react-icons/si';
+import { FaReact, FaNode, FaGitAlt, FaPhp, FaPython } from 'react-icons/fa';
+import { SiTypescript, SiChakraui, SiPostgresql, SiSqlite } from 'react-icons/si';
 import {
-  GiArtificialIntelligence,
   GiCompass,
   GiLightningSpanner,
   GiGalaxy,
@@ -117,9 +116,12 @@ const TECH_STACK = [
   { label: 'Chakra UI', icon: SiChakraui, color: '#2CFF99' },
   { label: 'Node.js', icon: FaNode, color: '#8CC84B' },
   { label: 'Git', icon: FaGitAlt, color: '#F1502F' },
-  { label: 'IA/ML', icon: GiArtificialIntelligence, color: '#FF6B35' },
   { label: 'Tailwind CSS', icon: RiTailwindCssFill, color: '#38BDF8' },
   { label: 'REST APIs', icon: TbApi, color: '#FFB347' },
+  { label: 'PHP', icon: FaPhp, color: '#777BB4' },
+  { label: 'Python', icon: FaPython, color: '#3776AB' },
+  { label: 'SQLite', icon: SiSqlite, color: '#336791' },
+  { label: 'PostgreSQL', icon: SiPostgresql, color: '#336791' },
 ];
 
 /**

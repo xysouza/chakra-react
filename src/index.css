@@ -9,3 +9,9 @@ html:focus-within {
 	}
 }
 
+/* Consistência de ajuste de texto entre navegadores móveis */
+html {
+	text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%; /* iOS Safari */
+}
+
